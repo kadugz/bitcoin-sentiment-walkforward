@@ -13,12 +13,7 @@ trading com custos de transação.
 >
 > **Resultado:** majoritariamente nulo — de 4 métricas testadas (RMSE, MAE,
 > acurácia, F1), só o F1 deu significativo em um teste (t pareado, p=0,035) e
-> não no outro (Wilcoxon, p=0,056). Discutimos isso como evidência consistente
-> com a Hipótese de Mercado Eficiente em sua forma semi-forte — um resultado
-> nulo bem controlado é, por si só, uma contribuição científica válida.
-
-O artigo completo (formato SBC) está em [`paper/`](paper/) — veja também a
-seção [Artigo](#artigo) abaixo.
+> não no outro (Wilcoxon, p=0,056). 
 
 ---
 
@@ -30,28 +25,27 @@ seção [Artigo](#artigo) abaixo.
 - [Principais resultados](#principais-resultados)
 - [Figuras](#figuras)
 - [Como reproduzir](#como-reproduzir)
-- [Artigo](#artigo)
 - [Limitações](#limitações)
 - [Licença](#licença)
 
 ## Estrutura do repositório
 
 ```
-.
-├── dev/
-│   ├── pipeline.py            # pipeline completo: dados -> features -> modelos -> figuras
-│   ├── lstm_utils.py          # LSTM, splits walk-forward, treino/avaliação (reaproveitado)
-│   ├── paper_style.py         # estilo visual compartilhado das figuras (paleta, fonte)
-│   ├── regenerate_figures.py  # regenera as figuras 01-08 a partir de dados já cacheados
-│   ├── make_extra_figures.py  # figura 09 (previsto vs. real, com RMSE anotado)
-│   └── validate_synthetic.py  # smoke-test do pipeline com dados sintéticos (sem downloads)
-├── data/
-│   ├── raw/                   # cache local: OHLCV (yfinance) e notícias (Kaggle)
-│   └── processed/             # cache: sentimento FinBERT, dataset de features final
-├── figs/                      # figuras geradas (01 a 09)
-├── outputs/                   # métricas e tabelas em CSV (baselines, testes estatísticos, etc.)
-├── paper/                     # artigo em LaTeX (modelo SBC), pronto para Overleaf
-└── README.md
+
+ dev/
+ ├── pipeline.py            # pipeline completo: dados -> features -> modelos -> figuras
+ ├── lstm_utils.py          # LSTM, splits walk-forward, treino/avaliação (reaproveitado)
+ ├── paper_style.py         # estilo visual compartilhado das figuras (paleta, fonte)
+ ├── regenerate_figures.py  # regenera as figuras 01-08 a partir de dados já cacheados
+ ├── make_extra_figures.py  # figura 09 (previsto vs. real, com RMSE anotado)
+ └── validate_synthetic.py  # smoke-test do pipeline com dados sintéticos (sem downloads)
+ data/
+ ├── raw/                   # cache local: OHLCV (yfinance) e notícias (Kaggle)
+ └── processed/             # cache: sentimento FinBERT, dataset de features final
+ figs/                      # figuras geradas (01 a 09)
+ outputs/                   # métricas e tabelas em CSV (baselines, testes estatísticos, etc.)
+ paper/                     # artigo em LaTeX (modelo SBC), pronto para Overleaf
+ README.md
 ```
 
 ## Dados
@@ -65,9 +59,9 @@ Duas fontes públicas e gratuitas:
   (Kaggle), ~31 mil manchetes com data de publicação, cobrindo out/2021–dez/2023.
 
 O alinhamento temporal usa o sentimento agregado do dia `D` para prever o
-fechamento de `D+1` (nunca o inverso), com checagem numérica explícita
+fechamento de `D+1`, com checagem numérica explícita
 anti-*look-ahead bias*. Como as notícias cobrem só ~33% do histórico de preço,
-a modelagem é restrita à janela com cobertura real de notícias (799 dias).
+a modelagem é restrita à janela com cobertura real de notícias, de 799 dias.
 
 ## Metodologia
 
@@ -113,7 +107,7 @@ Tabelas completas em [`outputs/`](outputs/).
 | 02 | Cobertura temporal das notícias vs. histórico de preço |
 | 03 | Distribuição do sentimento (FinBERT) |
 | 03b | Decomposição sazonal em 3 escalas (1, 30, 365 dias) |
-| 04 | PCA exploratório (variância explicada) |
+| 04 | PCA exploratório |
 | 05 | Heatmap de correlação entre features-chave e o alvo |
 | 06 | Esquema walk-forward (treino/validação/teste por fold) |
 | 07 | Permutation importance |
@@ -129,29 +123,20 @@ python dev/pipeline.py
 ```
 
 O pipeline usa cache em disco (`data/raw/`, `data/processed/`) para preço,
-notícias e sentimento FinBERT já processado — reexecuções subsequentes não
+notícias e sentimento FinBERT já processado. Reexecuções subsequentes não
 rebaixam nada da internet nem reprocessam o FinBERT, a menos que o cache seja
 apagado manualmente. Para um smoke-test rápido da lógica, sem downloads
 pesados, rode `python dev/validate_synthetic.py`.
 
-## Artigo
-
-O artigo completo, no modelo de artigo da SBC, está em
-[`paper/main.tex`](paper/main.tex) (pronto para importar no
-[Overleaf](https://www.overleaf.com/) — basta subir a pasta `paper/` como um
-projeto novo).
 
 ## Limitações
 
-Cobertura temporal restrita das notícias (~33% do histórico de preço); fonte
-única de notícias (não inclui redes sociais); granularidade diária (não
-intradiária); FinBERT não é específico para jargão cripto; amostra de 799
-dias particionada em poucos folds; ativo único (BTC-USD). Discussão completa
-na Seção 6 do artigo.
+Cobertura temporal restrita das notícias de aproximadamente 33% do histórico de preço; fonte
+única de notícias que não inclui redes sociais; FinBERT não é específico para jargão cripto; amostra de 799
+dias particionada em poucos folds.
 
-## Licença
-
-MIT — veja [`LICENSE`](LICENSE).
+## Nota de IA
+Uso do Chat GPT e Claude apenas na organização dos códigos, remoção de redundânicas/erros, criação de comentários/docstrings e design do README.
 
 ---
 
