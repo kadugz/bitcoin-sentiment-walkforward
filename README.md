@@ -140,5 +140,4 @@ Uso do Chat GPT e Claude apenas na organização dos códigos, remoção de redu
 
 ---
 
-Projeto desenvolvido como trabalho final da disciplina de IA.
-Contato: `seu.email@instituicao.edu.br`
+Projeto desenvolvido como trabalho final da disciplina Tópicos IA - Deep Learning, da pós graduação da UFABC.
