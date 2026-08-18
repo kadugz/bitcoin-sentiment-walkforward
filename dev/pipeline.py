@@ -48,7 +48,6 @@ DATA_RAW = PROJECT_ROOT / "data" / "raw"
 DATA_PROCESSED = PROJECT_ROOT / "data" / "processed"
 FIGS_DIR = PROJECT_ROOT / "figs"
 
-# Usa /mnt/user-data/outputs se existir (convenção do Claude.ai Analysis Tool); senão outputs/ local.
 _MNT_OUTPUTS = Path("/mnt/user-data/outputs")
 OUTPUTS_DIR = _MNT_OUTPUTS if _MNT_OUTPUTS.parent.exists() else PROJECT_ROOT / "outputs"
 
@@ -170,7 +169,7 @@ assert n_nan == 0, "Há NaNs inesperados nos dados de preço."
 
 # %%
 NEWS_CSV_PATH = Path(CONFIG["news_csv_path"])
-UPLOADS_DIR = Path("/mnt/user-data/uploads")  # convenção do Claude.ai Analysis Tool
+UPLOADS_DIR = Path("/mnt/user-data/uploads")
 
 
 def find_local_news_csv() -> Path | None:
@@ -209,7 +208,6 @@ def load_news_raw() -> pd.DataFrame:
             "AÇÃO NECESSÁRIA: baixe manualmente o dataset 'Cryptocurrency News' "
             "(https://www.kaggle.com/datasets/oliviervha/crypto-news) e coloque o CSV em UM "
             f"destes locais:\n  - {NEWS_CSV_PATH}\n  - {UPLOADS_DIR / 'cryptonews.csv'} "
-            "(se estiver rodando no Claude.ai Analysis Tool)\n"
             "Se preferir usar kagglehub, configure a autenticação do Kaggle "
             "(kaggle.json em ~/.kaggle/ ou variáveis KAGGLE_USERNAME/KAGGLE_KEY)."
         ) from exc
