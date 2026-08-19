@@ -2,8 +2,8 @@
 
 Previsão de movimento de preços do Bitcoin (BTC-USD) combinando dados numéricos
 (preço, volume, indicadores técnicos) com sentimento de notícias extraído via
-**FinBERT**, avaliada com metodologia honesta de séries temporais financeiras:
-baselines fortes, split *walk-forward* sem vazamento temporal, múltiplas
+**FinBERT**, avaliada com metodologia de séries temporais financeiras:
+baselines de persistência ingênua e ARIMA, split *walk-forward* sem vazamento temporal, múltiplas
 sementes com teste estatístico pareado, interpretabilidade e simulação de
 trading com custos de transação.
 
@@ -26,7 +26,6 @@ trading com custos de transação.
 - [Figuras](#figuras)
 - [Como reproduzir](#como-reproduzir)
 - [Limitações](#limitações)
-- [Licença](#licença)
 
 ## Estrutura do repositório
 
@@ -43,8 +42,8 @@ trading com custos de transação.
  ├── raw/                   # cache local: OHLCV (yfinance) e notícias (Kaggle)
  └── processed/             # cache: sentimento FinBERT, dataset de features final
  figs/                      # figuras geradas (01 a 09)
+ notebooks/                 # notebook com o pipeline completo (.ipynb)
  outputs/                   # métricas e tabelas em CSV (baselines, testes estatísticos, etc.)
- paper/                     # artigo em LaTeX (modelo SBC), pronto para Overleaf
  README.md
 ```
 
@@ -72,7 +71,7 @@ a modelagem é restrita à janela com cobertura real de notícias, de 799 dias.
 - **Split:** *walk-forward* de janela expandindo, 5 folds, treino < validação
   < teste sempre em ordem cronológica, sem sobreposição. `StandardScaler`
   ajustado só no treino de cada fold.
-- **Baselines honestos:** persistência ingênua (*random walk*) e ARIMA
+- **Baselines:** persistência ingênua (*random walk*) e ARIMA
   univariado (ordem por AIC, atualizado dia a dia sem *refit*).
 - **Modelo:** LSTM com encoder compartilhado e duas cabeças (regressão +
   classificação direcional), mesma arquitetura/hiperparâmetros para o modelo
@@ -131,13 +130,13 @@ pesados, rode `python dev/validate_synthetic.py`.
 
 ## Limitações
 
-Cobertura temporal restrita das notícias de aproximadamente 33% do histórico de preço; fonte
-única de notícias que não inclui redes sociais; FinBERT não é específico para jargão cripto; amostra de 799
+Cobertura temporal das notícias restrita a aproximadamente 33% do histórico de preço; fonte
+única de notícias, que não inclui redes sociais; FinBERT não é específico para jargão cripto; amostra de 799
 dias particionada em poucos folds.
 
 ## Nota de IA
-Uso do Chat GPT e Claude apenas na organização dos códigos, remoção de redundânicas/erros, criação de comentários/docstrings e design do README.
+Uso do Chat GPT e Claude apenas na organização dos códigos, remoção de redundâncias/erros, criação de comentários/docstrings e design do README.
 
 ---
 
-Projeto desenvolvido como trabalho final da disciplina Tópicos IA - Deep Learning, da pós graduação da UFABC.
+Projeto desenvolvido como trabalho final da disciplina Tópicos IA - Deep Learning, da pós graduação da UFABC, pelo professor Ronaldo Cristiano Prati.
